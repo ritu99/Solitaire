@@ -13,6 +13,15 @@ enum class Suit (val stringRepresentation: String, val color: Color){
         return stringRepresentation
     }
 
+    fun toEasyString() : String{
+        return when(this){
+            HEARTS -> "H"
+            SPADES -> "S"
+            CLUBS -> "C"
+            DIAMONDS -> "D"
+        }
+    }
+
     enum class Color{
         RED,
         BLACK

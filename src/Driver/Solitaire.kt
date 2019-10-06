@@ -2,6 +2,7 @@ package Driver
 
 import GUI.BoardPresenter
 import GUI.Display
+import Models.Card
 import Models.Column
 import Models.Foundation
 import Models.Suit
@@ -12,12 +13,13 @@ import java.util.*
  * Created by Ritvik on 9/29/2019.
  */
 
-val boardPresenter = BoardPresenter()
 val input = Scanner(System.`in`);
 
 fun main(args: Array<String>) {
+    if(args.contains("-easy-read")) CardDisplayHelper.easyRead = true
+    val boardPresenter = BoardPresenter()
 
-    printDisplay()
+    printDisplay(boardPresenter)
     println("Welcome to Solitaire!")
     println("")
     printMenu()
@@ -25,7 +27,7 @@ fun main(args: Array<String>) {
         val option = input.next()[0]
         val validMove: Boolean =
                 when(option){
-                    'F', 'f' -> {moveToFoundation(); true}
+                    'F', 'f' -> {boardPresenter.deckToFoundation()}
                     'C', 'c' -> boardPresenter.deckToColumn(getColumnNumber())
                     'T', 't' -> boardPresenter.columnToFoundation(getColumnNumber())
                     'R', 'r' -> boardPresenter.columnToColumn(
@@ -35,7 +37,7 @@ fun main(args: Array<String>) {
                     else -> false
                 }
         clear()
-        printDisplay()
+        printDisplay(boardPresenter)
         if(!validMove){
             println("That wasn't a valid move!")
         }
@@ -50,8 +52,8 @@ fun main(args: Array<String>) {
 fun clear(){
     println("\u001Bc")}
 
-fun printDisplay(){
-    println(createDisplay().toString())
+fun printDisplay(boardPresenter: BoardPresenter){
+    println(createDisplay(boardPresenter).toString())
 }
 
 fun quit(){
@@ -70,12 +72,6 @@ fun getColumnNumber(message: String = "Which column?") : Int{
     }
 }
 
-fun moveToFoundation(){
-    if(boardPresenter.deckToFoundation())
-    else
-        println("That wasn't a valid move!")
-}
-
 fun printMenu(){
     println("Enter a command to continue")
     println("\t F - Move deck to a foundation")
@@ -86,7 +82,7 @@ fun printMenu(){
     println("\t Q - Quit")
 }
 
-fun createDisplay(): Display{
+fun createDisplay(boardPresenter: BoardPresenter): Display{
     val display = createFoundations(boardPresenter.foundations)
 
     val buffer = Display()

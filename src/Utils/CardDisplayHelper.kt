@@ -27,6 +27,8 @@ object CardDisplayHelper{
     const val cardWidth = 9
     const val cardHeight = 7
 
+    var easyRead = false
+
     init {
         cardToDisplay[Rank.TWO]   = two
         cardToDisplay[Rank.THREE] = three
@@ -48,8 +50,8 @@ object CardDisplayHelper{
     }
 
     private fun unicodeCard(suit: Suit, rank: Rank): String{
-        return cardToDisplay.getValue(rank).replaceFirst("*", suit.toString())
-                .reversed().replaceFirst("*", suit.toString()).reversed()
+        return cardToDisplay.getValue(rank).replaceFirst("*", if (easyRead) suit.toEasyString() else suit.toString())
+                .reversed().replaceFirst("*", if (easyRead) suit.toEasyString() else suit.toString()).reversed()
     }
 
     fun getBlankCard() : Display{
